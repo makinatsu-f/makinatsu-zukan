@@ -793,7 +793,7 @@ const questions = [
 
 let currentQuestion = 0;
 let quizFinished = false;
-
+let correctAnswers = 0;
 
 /* ==================================================
    画面切り替え
@@ -921,7 +921,8 @@ function showResult(correct) {
     correct ? "正解！" : "おしい〜";
 
   if (correct) {
-
+　　　correctAnswers++;　
+   
     text.innerHTML =
       `<strong>${q.correctText}</strong>`;
 
@@ -962,19 +963,22 @@ function retryQuestion() {
 
 function nextQuestion() {
 
-  if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < questions.length - 1) {
 
-    currentQuestion++;
+        currentQuestion++;
 
-    showQuestion();
+        showQuestion();
 
-  } else {
+    } else {
 
-    finishQuiz();
+        if (correctAnswers === questions.length) {
+            finishQuiz();
+        } else {
+            showScreen("home");
+        }
 
-  }
+    }
 }
-
 
 /* ==================================================
    クイズ終了
