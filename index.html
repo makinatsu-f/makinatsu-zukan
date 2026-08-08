@@ -628,7 +628,61 @@
     </button>
 
   </section>
+<!-- =========================
+     もう一回やってみよう
+========================= -->
+<section id="retry-message" class="screen">
 
+  <div style="text-align:center;">
+
+    <p style="
+      font-size:20px;
+      font-weight:bold;
+      color:#66514d;
+      margin:25px 0 20px;
+    ">
+      もう一回やってみよう！
+    </p>
+
+    <img
+      src="cat.png"
+      alt="応援する猫"
+      style="
+        width:140px;
+        height:140px;
+        object-fit:contain;
+        display:block;
+        margin:0 auto 25px;
+      "
+    >
+
+    <p style="
+      font-size:20px;
+      line-height:1.7;
+      margin:0 0 70px;
+    ">
+      💡 3問正解して<br>
+      ホホジロザメバッジを<br>
+      GETしよう！
+    </p>
+
+    <button
+      class="small-button"
+      onclick="startQuiz()"
+    >
+      もう一度チャレンジ！
+    </button>
+
+    <button
+      class="small-button"
+      onclick="showScreen('home')"
+    >
+      ホホジロザメページへ戻る
+    </button>
+
+  </div>
+
+</section>
 
   <!-- =========================
        ⑦ 全問正解
@@ -931,16 +985,11 @@ function showResult(correct) {
 
     retry.style.display = "none";
 
-  } else {
+} else {
 
-    text.innerHTML =
-      q.wrongText;
-
-    knowledge.innerHTML =
-      `💡 一つ覚えたね！`;
-
-    retry.style.display = "block";
-  }
+    showScreen("retry-message");
+    return;
+}
 
   showScreen("result");
 }
