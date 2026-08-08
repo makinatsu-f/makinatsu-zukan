@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マキナツミニ図鑑ミニゲーム</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: #f1f3f6;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Noto Sans JP",
+      "Yu Gothic",
+      sans-serif;
+    color: #111;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+  }
+
+  .app {
+    width: min(100%, 430px);
+    min-height: 100vh;
+    margin: 0 auto;
+    background: white;
+  }
+
+  .screen {
+    min-height: 100vh;
+    padding: 28px 22px 40px;
+    display: none;
+  }
+
+  .screen.active {
+    display: block;
+  }
+
+  h1, h2, h3, p {
+    margin-top: 0;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 24px;
+    margin: 10px 0 24px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 25px;
+  }
+
+  /* --------------------
+     共通ボタン
+  -------------------- */
+
+  .main-button {
+    display: block;
+    width: fit-content;
+    min-width: 110px;
+    margin: 16px auto;
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .blue {
+    background: #11b5ed;
+  }
+
+  .pink {
+    background: #f08086;
+  }
+
+  .yellow {
+    background: #ffe000;
+  }
+
+  .green {
+    background: #7bd957;
+  }
+
+  .small-button {
+    display: block;
+    margin: 15px auto;
+    padding: 9px 20px;
+    border-radius: 25px;
+    background: #7bd957;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .back-button {
+    display: block;
+    margin: 28px auto 0;
+    padding: 7px 20px;
+    border-radius: 20px;
+    background: #11b5ed;
+    font-weight: bold;
+  }
+
+  /* --------------------
+     トップ
+  -------------------- */
+
+  .logo {
+    text-align: center;
+    font-size: 27px;
+    font-weight: bold;
+    margin: 10px 0 8px;
+  }
+
+  .concept {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .category-button {
+    width: 90%;
+    margin: 15px auto;
+    padding: 18px;
+    border-radius: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .category-shark {
+    background: #11a4bb;
+    color: white;
+  }
+
+  .category-dinosaur {
+    background: #65b94c;
+    color: white;
+  }
+
+  .category-insect {
+    background: #e8a934;
+    color: white;
+  }
+
+  /* --------------------
+     生き物一覧
+  -------------------- */
+
+  .collection-count {
+    text-align: center;
+    background: #11b5ed;
+    color: white;
+    border-radius: 20px;
+    padding: 7px 12px;
+    width: fit-content;
+    margin: 0 auto 22px;
+    font-weight: bold;
+  }
+
+  .animal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .animal-card {
+    background: #0b9bb1;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    position: relative;
+    min-height: 150px;
+  }
+
+  .animal-card img {
+    width: 100%;
+    height: 85px;
+    object-fit: contain;
+    border-radius: 10px;
+  }
+
+  .animal-name {
+    color: white;
+    font-weight: bold;
+    margin-top: 7px;
+  }
+
+  .locked {
+    opacity: 0.55;
+  }
+
+  .lock {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    font-size: 22px;
+  }
+
+  /* --------------------
+     ホホジロザメページ
+  -------------------- */
+
+  .animal-image {
+    width: 88%;
+    height: 150px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 30px;
+    background: #0b9fb4;
+    border-radius: 15px;
+  }
+
+  .guide-text {
+    text-align: center;
+    font-size: 13px;
+    margin-top: -7px;
+    margin-bottom: 30px;
+  }
+
+  /* --------------------
+     図鑑
+  -------------------- */
+
+  .zukan-image {
+    width: 100%;
+    display: block;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .zukan-note {
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 18px 5px;
+  }
+
+  /* --------------------
+     クイズ
+  -------------------- */
+
+  .quiz-label {
+    width: fit-content;
+    margin: 0 auto 50px;
+    padding: 8px 18px;
+    border-radius: 25px;
+    background: #f08086;
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  .question-number {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 35px;
+  }
+
+  .question {
+    text-align: center;
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+
+  .answer-button {
+    display: block;
+    width: 90%;
+    margin: 15px auto;
+    padding: 10px;
+    background: white;
+    border: none;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  .answer-button:hover {
+    background: #f5f5f5;
+  }
+
+  /* --------------------
+     正解・不正解
+  -------------------- */
+
+  .result-character {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 10px;
+  }
+
+  .result-title {
+    text-align: center;
+    font-size: 29px;
+    font-weight: bold;
+    margin: 10px 0 28px;
+  }
+
+  .result-text {
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .knowledge {
+    text-align: center;
+    font-size: 14px;
+    margin: 25px 0;
+  }
+
+  /* --------------------
+     全問正解
+  -------------------- */
+
+  .complete {
+    text-align: center;
+  }
+
+  .complete-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 15px 0 5px;
+  }
+
+  .big-star {
+    font-size: 80px;
+    line-height: 1;
+    margin: 8px 0;
+  }
+
+  .badge-card {
+    width: 220px;
+    margin: 15px auto;
+    padding: 18px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  }
+
+  .badge {
+    font-size: 58px;
+    margin-bottom: 8px;
+  }
+
+  .badge-name {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .bag-message {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 20px 0;
+  }
+
+  /* --------------------
+     コレクション
+  -------------------- */
+
+  .collection-card {
+    background: #0b9fb4;
+    border-radius: 15px;
+    padding: 12px;
+    text-align: center;
+    color: white;
+  }
+
+  .collection-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+  }
+
+  .collection-card.locked img {
+    filter: grayscale(1);
+  }
+
+  .collection-badge {
+    font-size: 20px;
+    margin-top: 5px;
+  }
+
+  /* --------------------
+     バッグ
+  -------------------- */
+
+  .bag-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 25px auto;
+  }
+
+  .shop-button {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 12px 25px;
+    border-radius: 30px;
+    background: #ffe000;
+    color: #111;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  /* --------------------
+     小さな説明
+  -------------------- */
+
+  .mini-note {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #555;
+    margin-top: 25px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =========================
+       ① トップ
+  ========================== -->
+  <section id="home" class="screen active">
+
+    <div class="logo">🦈 マキナツ生き物図鑑</div>
+
+    <p class="concept">
+      「もっと知りたい！またやりたい！」<br>
+      遊びながら生き物を好きになろう。
+    </p>
+
+    <button class="category-button category-shark"
+            onclick="showScreen('shark-list')">
+      🦈 サメ
+    </button>
+
+    <button class="category-button category-dinosaur"
+            onclick="showComingSoon('恐竜')">
+      🦕 恐竜
+    </button>
+
+    <button class="category-button category-insect"
+            onclick="showComingSoon('昆虫')">
+      🐞 昆虫
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       ② サメ一覧
+  ========================== -->
+  <section id="shark-list" class="screen">
+
+    <h1 class="title">サメのなかま</h1>
+
+    <div class="collection-count">
+      🏅 <span id="shark-count">0</span> / 20
+    </div>
+
+    <p class="subtitle">
+      あつめてみよう！
+    </p>
+
+    <div class="animal-grid">
+
+      <button class="animal-card" onclick="showScreen('shark-home')">
+        <img src="shark.png" alt="ホホジロザメ">
+        <div class="animal-name">ホホジロザメ</div>
+      </button>
+
+      <div class="animal-card locked">
+        <img src="shark-placeholder.png" alt="ネコザメ">
+        <div class="animal-name">ネコザメ</div>
+        <div class="lock">🔒</div>
+      </div>
+
+      <div class="animal-card locked">
+        <img src="shark-placeholder.png" alt="ジンベエザメ">
+        <div class="animal-name">ジンベエザメ</div>
+        <div class="lock">🔒</div>
+      </div>
+
+      <div class="animal-card locked">
+        <img src="shark-placeholder.png" alt="シュモクザメ">
+        <div class="animal-name">シュモクザメ</div>
+        <div class="lock">🔒</div>
+      </div>
+
+    </div>
+
+    <button class="back-button" onclick="showScreen('home')">
+      戻る
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       ③ ホホジロザメ
+  ========================== -->
+  <section id="shark-home" class="screen">
+
+    <h1 class="title">ホホジロザメ</h1>
+
+    <img class="animal-image"
+         src="shark.png"
+         alt="ホホジロザメ">
+
+    <button class="main-button blue"
+            onclick="showScreen('zukan')">
+      ずかん
+    </button>
+
+    <p class="guide-text">
+      まずは図鑑を見てみよう！
+    </p>
+
+    <button class="main-button pink"
+            onclick="startQuiz()">
+      クイズ
+    </button>
+
+    <p class="guide-text">
+      クイズに挑戦しよう！
+    </p>
+
+    <p class="mini-note">
+      全問正解でホホジロザメバッジGET！
+    </p>
+
+  </section>
+
+
+  <!-- =========================
+       ④ 図鑑
+  ========================== -->
+  <section id="zukan" class="screen">
+
+    <div class="quiz-label" style="background:#11b5ed;">
+      ずかん
+    </div>
+
+    <!--
+      ここに多恵さんの図鑑画像を入れます。
+      ファイル名は shark-zukan.jpg にしてください。
+    -->
+    <img class="zukan-image"
+         src="shark-zukan.jpg"
+         alt="ホホジロザメ図鑑">
+
+    <p class="zukan-note">
+      マキナツがアップリケを制作する中で知った、
+      ホホジロザメの「へぇ！」を楽しく紹介しています。
+    </p>
+
+    <button class="back-button"
+            onclick="showScreen('shark-home')">
+      戻る
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       ⑤ クイズ
+  ========================== -->
+  <section id="quiz" class="screen">
+
+    <div class="quiz-label">
+      クイズ
+    </div>
+
+    <div id="quiz-content"></div>
+
+  </section>
+
+
+  <!-- =========================
+       ⑥ 正解・不正解
+  ========================== -->
+  <section id="result" class="screen">
+
+    <img id="result-character"
+         class="result-character"
+         src="cat.png"
+         alt="猫">
+
+    <div id="result-title"
+         class="result-title">
+    </div>
+
+    <div id="result-text"
+         class="result-text">
+    </div>
+
+    <div id="knowledge"
+         class="knowledge">
+    </div>
+
+    <button id="retry-button"
+            class="small-button"
+            onclick="retryQuestion()">
+      もう一度
+    </button>
+
+    <button id="next-button"
+            class="small-button"
+            onclick="nextQuestion()">
+      次へ
+    </button>
+
+  </section>
+
+
+  <!-- =========================
+       ⑦ 全問正解
+  ========================== -->
+  <section id="complete" class="screen">
+
+    <div class="complete">
+
+      <div class="complete-title">
+        全問正解！
+      </div>
+
+      <div class="big-star">
+        ★
+      </div>
+
+      <img class="animal-image"
+           src="shark.png"
+           alt="ホホジロザメ">
+
+      <div class="badge-card">
+
+        <div class="badge">
+          🏅
+        </div>
+
+        <div class="badge-name">
+          ホホジロザメ GET!
+        </div>
+
+        <div style="margin-top:8px;">
+          サメコレクション
+          <span id="complete-count">1</span> / 20
+        </div>
+
+      </div>
+
+      <button class="small-button"
+              onclick="showScreen('shark-list')">
+        コレクションを見る
+      </button>
+
+      <p class="bag-message">
+        このホホジロザメ、バッグになるよ🦈
+      </p>
+
+      <a class="shop-button"
+         href="https://makinatsu.base.shop/items/96579774"
+         target="_blank"
+         rel="noopener">
+        バッグを見てみる →
+      </a>
+
+      <button class="back-button"
+              onclick="showScreen('shark-home')">
+        戻る
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       ⑧ 恐竜・昆虫 Coming Soon
+  ========================== -->
+  <section id="coming-soon" class="screen">
+
+    <h1 class="title" id="coming-title"></h1>
+
+    <p style="text-align:center; margin-top:60px;">
+      ただいま準備中です😊
+    </p>
+
+    <button class="back-button"
+            onclick="showScreen('home')">
+      戻る
+    </button>
+
+  </section>
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   基本設定
+================================================== */
+
+const questions = [
+
+  {
+    question: "ホホジロザメのお腹は？",
+    answers: [
+      "白",
+      "黒",
+      "青"
+    ],
+    correct: 0,
+
+    correctText:
+      "ホホジロザメのお腹は白いよ！",
+
+    explanation:
+      "だからホホジロザメって名前なんだ😊",
+
+    wrongText:
+      "ホホジロザメのお腹は・・・🤍 白だったよ！"
+  },
+
+  {
+    question:
+      "サメの尾びれにある欠刻（ギザギザ）は何のためにあるでしょう？",
+
+    answers: [
+      "友達と手をつなぐため",
+      "後ろの敵をよく見るため",
+      "水のブレーキを減らして静かに泳ぐため"
+    ],
+
+    correct: 2,
+
+    correctText:
+      "欠刻があるおかげで、水が後ろへきれいに流れ、音を立てずに泳ぐのに役立つんだよ。",
+
+    explanation:
+      "サメが静かに、速く泳ぐためのすごい秘密なんだ！",
+
+    wrongText:
+      "正解は③「水のブレーキを減らして静かに泳ぐため」だよ！"
+  },
+
+  {
+    question:
+      "海の最強ハンター「ホホジロザメ」にも、実は天敵が一匹だけ大きな敵がいます。その生きものはどれでしょう？",
+
+    answers: [
+      "シャチ",
+      "ダイオウイカ",
+      "ティラノサウルス"
+    ],
+
+    correct: 0,
+
+    correctText:
+      "シャチは仲間と協力してホホジロザメを襲います。",
+
+    explanation:
+      "さらにシャチは、サメの体で最も栄養価がある「肝臓（かんぞう）」だけを賢く狙って食べます。",
+
+    wrongText:
+      "正解は「シャチ」だよ！"
+  }
+
+];
+
+
+/* ==================================================
+   クイズの状態
+================================================== */
+
+let currentQuestion = 0;
+let quizFinished = false;
+
+
+/* ==================================================
+   画面切り替え
+================================================== */
+
+function showScreen(id) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  const target = document.getElementById(id);
+
+  if (target) {
+    target.classList.add("active");
+    window.scrollTo(0, 0);
+  }
+
+  updateCollectionCount();
+}
+
+
+/* ==================================================
+   恐竜・昆虫
+================================================== */
+
+function showComingSoon(name) {
+
+  document.getElementById("coming-title").textContent =
+    name + "のなかま";
+
+  showScreen("coming-soon");
+}
+
+
+/* ==================================================
+   クイズ開始
+================================================== */
+
+function startQuiz() {
+
+  currentQuestion = 0;
+  quizFinished = false;
+
+  showQuestion();
+}
+
+
+/* ==================================================
+   問題表示
+================================================== */
+
+function showQuestion() {
+
+  const q = questions[currentQuestion];
+
+  let html = "";
+
+  html += `
+    <div class="question-number">
+      第${currentQuestion + 1}問
+    </div>
+  `;
+
+  html += `
+    <div class="question">
+      ${q.question}
+    </div>
+  `;
+
+  q.answers.forEach((answer, index) => {
+
+    html += `
+      <button
+        class="answer-button"
+        onclick="answerQuestion(${index})">
+        ○ ${answer}
+      </button>
+    `;
+
+  });
+
+  document.getElementById("quiz-content").innerHTML = html;
+
+  showScreen("quiz");
+}
+
+
+/* ==================================================
+   回答
+================================================== */
+
+function answerQuestion(answerIndex) {
+
+  const q = questions[currentQuestion];
+
+  const correct =
+    answerIndex === q.correct;
+
+  showResult(correct);
+}
+
+
+/* ==================================================
+   結果表示
+================================================== */
+
+function showResult(correct) {
+
+  const q = questions[currentQuestion];
+
+  const title =
+    document.getElementById("result-title");
+
+  const text =
+    document.getElementById("result-text");
+
+  const knowledge =
+    document.getElementById("knowledge");
+
+  const retry =
+    document.getElementById("retry-button");
+
+  title.textContent =
+    correct ? "正解！" : "おしい〜";
+
+  if (correct) {
+
+    text.innerHTML =
+      `<strong>${q.correctText}</strong>`;
+
+    knowledge.innerHTML =
+      `💡 ${q.explanation}`;
+
+    retry.style.display = "none";
+
+  } else {
+
+    text.innerHTML =
+      q.wrongText;
+
+    knowledge.innerHTML =
+      `💡 一つ覚えたね！`;
+
+    retry.style.display = "block";
+  }
+
+  showScreen("result");
+}
+
+
+/* ==================================================
+   もう一度
+   → 同じ問題を再挑戦
+================================================== */
+
+function retryQuestion() {
+
+  showQuestion();
+}
+
+
+/* ==================================================
+   次へ
+================================================== */
+
+function nextQuestion() {
+
+  if (currentQuestion < questions.length - 1) {
+
+    currentQuestion++;
+
+    showQuestion();
+
+  } else {
+
+    finishQuiz();
+
+  }
+}
+
+
+/* ==================================================
+   クイズ終了
+================================================== */
+
+function finishQuiz() {
+
+  quizFinished = true;
+
+  localStorage.setItem(
+    "makinatsu-shirobadge",
+    "true"
+  );
+
+  showScreen("complete");
+}
+
+
+/* ==================================================
+   コレクション数
+================================================== */
+
+function updateCollectionCount() {
+
+  const hasBadge =
+    localStorage.getItem(
+      "makinatsu-shirobadge"
+    ) === "true";
+
+  const count =
+    hasBadge ? 1 : 0;
+
+  const countElement =
+    document.getElementById("shark-count");
+
+  const completeElement =
+    document.getElementById("complete-count");
+
+  if (countElement) {
+    countElement.textContent = count;
+  }
+
+  if (completeElement) {
+    completeElement.textContent = count;
+  }
+}
+
+
+/* ==================================================
+   最初に実行
+================================================== */
+
+updateCollectionCount();
+
+</script>
+
+</body>
+</html>
