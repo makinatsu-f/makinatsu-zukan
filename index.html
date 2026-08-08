@@ -111,7 +111,19 @@
     background: #11b5ed;
     font-weight: bold;
   }
-
+ 
+.back-button2 {
+  display: block;
+  margin: 28px auto 0;
+  padding: 12px 24px;
+  border-radius: 25px;
+  background: #b8e26b;
+  color: #000;
+  border: 2px solid #7aa23f;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
   /* --------------------
      トップ
   -------------------- */
@@ -427,6 +439,15 @@
     color: #555;
     margin-top: 25px;
   }
+ .home-link {
+  display: inline-block;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  color: #555;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+}
 </style>
 </head>
 
@@ -506,10 +527,13 @@
 
     </div>
 
-    <button class="back-button" onclick="showScreen('home')">
-      戻る
-    </button>
-
+  <a
+  class="home-link"
+  href="#"
+  onclick="showScreen('home'); return false;"
+>
+  🏠 ホームへ
+</a>
   </section>
 
 
@@ -545,7 +569,13 @@
     <p class="mini-note">
       全問正解でホホジロザメバッジGET！
     </p>
-
+<a
+  class="home-link"
+  href="#"
+  onclick="showScreen('home'); return false;"
+>
+  🏠 ホームへ
+</a>
   </section>
 
 
@@ -571,10 +601,17 @@
       ホホジロザメの「へぇ！」を楽しく紹介しています。
     </p>
 
-    <button class="back-button"
+    <button class="back-button2"
             onclick="showScreen('shark-home')">
-      戻る
+      ホホジロザメのページに戻る
     </button>
+<a
+  class="home-link"
+  href="#"
+  onclick="showScreen('home'); return false;"
+>
+  🏠 ホームへ
+</a>
 
   </section>
 
